@@ -1,0 +1,57 @@
+@CustomFields = (
+    {
+        Name        => 'Billing Client',
+        Type        => 'FreeformSingle',
+        LookupType  => RT::Transaction->CustomFieldLookupType,
+        Description => 'Client name for billing purposes',
+        Disabled    => 0,
+    },
+    {
+        Name        => 'Client',
+        Type        => 'FreeformSingle',
+        LookupType  => RT::Ticket->CustomFieldLookupType,
+        Description => 'Client name',
+        Disabled    => 0,
+    },
+    {
+        Name        => 'Billing Status',
+        Type        => 'Select',
+        LookupType  => RT::Transaction->CustomFieldLookupType,
+        Description => 'Tracks billing lifecycle of a transaction',
+        Values      => [ 'Approved', 'Billed', 'Void' ],
+        Disabled    => 0,
+    },
+
+);
+
+@ScripActions = (
+    {
+        Name        => 'SyncBillingClientCF',
+        Description => 'Sync Billing Client CF from ticket to transaction',
+        ExecModule  => 'SyncBillingClientCF',
+    },
+    {
+        Name        => 'SetClientFromEmailDomain',
+        Description => 'Set Client CF based on requestor email domain',
+        ExecModule  => 'SetClientFromEmailDomain',
+    },
+);
+
+@Scrips = (
+    {
+        Description => 'Sync Billing Client on TimeWorked change',
+        ScripAction => 'SyncBillingClientCF',
+        Condition   => 'On TimeWorked Change',
+        Template    => 'Blank',
+        Stage       => 'TransactionCreate',
+        Queue       => '0',
+    },
+    {
+        Description => 'Set Client on ticket creation',
+        ScripAction => 'SetClientFromEmailDomain',
+        Condition   => 'On Create',
+        Template    => 'Blank',
+        Stage       => 'TransactionCreate',
+        Queue       => '0',
+    },
+);
