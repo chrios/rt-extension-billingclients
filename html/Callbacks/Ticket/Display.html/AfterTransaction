@@ -1,0 +1,6 @@
+
+<%init>
+return unless $Transaction;
+</%init>
+<& /Elements/EditTransactionCFs, TransactionObj => $Transaction &>
+

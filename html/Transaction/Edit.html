@@ -1,0 +1,15 @@
+<%init>
+my $txn_id = $ARGS{'TransactionId'};
+my $txn = RT::Transaction->new($session{'CurrentUser'});
+$txn->Load($txn_id);
+
+foreach my $key (keys %ARGS) {
+    next unless $key =~ /^CustomField-(\d+)$/;
+    my $cfid = $1;
+    my $value = $ARGS{$key};
+    $txn->AddCustomFieldValue(Field => $cfid, Value => $value);
+}
+
+RT::Interface::Web::Redirect("/Ticket/Display.html?id=" . $txn->TicketObj->Id);
+return;
+</%init>

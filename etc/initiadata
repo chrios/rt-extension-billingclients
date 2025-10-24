@@ -21,7 +21,14 @@
         Values      => [ 'Approved', 'Billed', 'Void' ],
         Disabled    => 0,
     },
-
+    {
+        Name        => 'Work Type',
+        Type        => 'Select',
+        LookupType  => RT::Transaction->CustomFieldLookupType,
+        Description => 'Tracks billing lifecycle of a transaction',
+        Values      => [ 'Remote Support', 'Onsite Support', 'Remote Support (Out of Hours)', 'Onsite Support (Out of Hours)' ],
+        Disabled    => 0,
+    },
 );
 
 @ScripActions = (

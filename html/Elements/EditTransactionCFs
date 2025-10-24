@@ -1,0 +1,18 @@
+
+<%args>
+$TransactionObj => undef
+</%args>
+<%init>
+my @cfs = RT::CustomField->new($session{'CurrentUser'})->Collection(
+    Filter => 'LookupType', Value => 'RT::Transaction-RT::Ticket'
+);
+</%init>
+/Transaction/Edit.html
+<input type="hidden" name="TransactionId" value="<% $TransactionObj->Id %>" />
+% foreach my $cf (@cfs) {
+    <label><% $cf->Name %>:</label>
+    <input type="text" name="CustomField-<% $cf->Id %>" value="<% $TransactionObj->FirstCustomFieldValue($cf->Id) %>" />
+    <br/>
+% }
+<input type="submit" value="Update" />
+</form>
